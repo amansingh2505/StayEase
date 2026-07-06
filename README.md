@@ -1,16 +1,42 @@
-# React + Vite
+# 🏨 StayEase
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and responsive **Hotel Booking Frontend** built using **React.js**, **Vite**, and **Tailwind CSS**. The application allows users to browse hotels, search, filter, sort, and view detailed hotel information using a REST API.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- 🔍 Search hotels by name or location
+- 📍 Filter hotels by city
+- ⭐ Filter hotels by rating
+- 💰 Sort hotels by price
+- 🏨 Hotel details page
+- 📱 Responsive design
+- ⚡ API integration
 
-## React Compiler
+## 🛠 Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React.js
+- Vite
+- Tailwind CSS
+- React Router DOM
+- React Icons
 
-## Expanding the ESLint configuration
+## 📦 Installation
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+git clone https://github.com/amansingh2505/StayEase.git
+cd StayEase
+npm install
+npm run dev
+```
+
+## 🌐 API
+
+Hotel data is fetched from the provided REST API.
+
+## 👨‍💻 Author
+
+**Aman Singh**
+
+GitHub: https://github.com/amansingh2505
+
+LinkedIn: https://www.linkedin.com/in/aman-singh-586976326/
