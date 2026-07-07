@@ -1,36 +1,63 @@
 import { Link, NavLink } from "react-router-dom";
 import { FaHotel, FaPhoneAlt, FaBars } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 function Navbar() {
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur-xl">
+    <motion.header
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{
+        duration: 0.7,
+        ease: "easeOut",
+      }}
+      className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur-xl"
+    >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
 
-        <Link
-          to="/"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="flex items-center gap-3"
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.2 }}
         >
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-100 shadow-sm">
-            <FaHotel size={22} className="text-orange-500" />
-          </div>
+          <Link
+            to="/"
+            onClick={() =>
+              window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+              })
+            }
+            className="flex items-center gap-3"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-100 shadow-sm">
+              <FaHotel
+                size={22}
+                className="text-orange-500"
+              />
+            </div>
 
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-800">
-              StayEase
-            </h1>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight text-slate-800">
+                StayEase
+              </h1>
 
-            <p className="text-xs text-slate-500">
-              Luxury Hotel Booking
-            </p>
-          </div>
-        </Link>
+              <p className="text-xs text-slate-500">
+                Luxury Hotel Booking
+              </p>
+            </div>
+          </Link>
+        </motion.div>
 
         <nav className="hidden items-center gap-10 lg:flex">
 
           <NavLink
             to="/"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onClick={() =>
+              window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+              })
+            }
             className={({ isActive }) =>
               `font-medium transition ${
                 isActive
@@ -60,29 +87,38 @@ function Navbar() {
 
         <div className="hidden items-center gap-4 lg:flex">
 
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.2 }}
             onClick={() => alert("Login feature coming soon.")}
             className="rounded-xl border border-slate-200 px-5 py-2.5 font-medium text-slate-700 transition hover:bg-slate-100"
           >
             Login
-          </button>
+          </motion.button>
 
-          <a
+          <motion.a
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.2 }}
             href="#footer"
             className="flex items-center gap-2 rounded-xl bg-slate-800 px-5 py-2.5 font-medium text-white transition hover:bg-black"
           >
             <FaPhoneAlt size={12} />
             Contact
-          </a>
+          </motion.a>
 
         </div>
 
-        <button className="rounded-xl border border-slate-200 p-3 transition hover:bg-slate-100 lg:hidden">
+        <motion.button
+          whileTap={{ scale: 0.9 }}
+          className="rounded-xl border border-slate-200 p-3 transition hover:bg-slate-100 lg:hidden"
+        >
           <FaBars />
-        </button>
+        </motion.button>
 
       </div>
-    </header>
+    </motion.header>
   );
 }
 

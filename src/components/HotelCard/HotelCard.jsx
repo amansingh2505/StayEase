@@ -1,17 +1,31 @@
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
+import { motion } from "framer-motion";
 
 function HotelCard({ hotel }) {
   return (
-    <article className="group overflow-hidden rounded-3xl bg-white shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-
+    <motion.article
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{
+        duration: 0.6,
+        ease: "easeOut",
+      }}
+      whileHover={{
+        y: -10,
+      }}
+      className="group overflow-hidden rounded-3xl bg-white shadow-md"
+    >
       <div className="relative overflow-hidden">
 
-        <img
+        <motion.img
           src={hotel.thumbnail}
           alt={hotel.name}
-          className="h-64 w-full object-cover transition duration-500 group-hover:scale-110"
+          whileHover={{ scale: 1.08 }}
+          transition={{ duration: 0.5 }}
+          className="h-64 w-full object-cover"
         />
 
         <div className="absolute left-4 top-4 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-slate-800 shadow-lg backdrop-blur-sm">
@@ -20,6 +34,7 @@ function HotelCard({ hotel }) {
 
         <div className="absolute right-4 top-4 flex items-center gap-1 rounded-full bg-white px-3 py-2 shadow-lg">
           <FaStar className="text-yellow-400" />
+
           <span className="font-semibold text-slate-700">
             {hotel.rating}
           </span>
@@ -54,18 +69,27 @@ function HotelCard({ hotel }) {
             </p>
           </div>
 
-          <Link
-            to={`/hotel/${hotel.id}`}
-            className="rounded-xl bg-slate-800 px-5 py-3 font-medium text-white transition duration-300 hover:bg-black"
+          <motion.div
+            whileHover={{
+              scale: 1.05,
+            }}
+            whileTap={{
+              scale: 0.95,
+            }}
           >
-            View Details
-          </Link>
+            <Link
+              to={`/hotel/${hotel.id}`}
+              className="rounded-xl bg-slate-800 px-5 py-3 font-medium text-white transition hover:bg-black"
+            >
+              View Details
+            </Link>
+          </motion.div>
 
         </div>
 
       </div>
 
-    </article>
+    </motion.article>
   );
 }
 

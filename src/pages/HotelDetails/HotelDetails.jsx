@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaLocationDot, FaStar } from "react-icons/fa6";
+import { motion } from "framer-motion";
 import { fetchHotels } from "../../services/api";
 
 function HotelDetails() {
@@ -44,24 +45,39 @@ function HotelDetails() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-100 py-10">
-
-      <div className="mx-auto max-w-7xl px-6">
+    <motion.main
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-slate-100 py-10"
+    >
+      <motion.div
+        initial={{ y: 35 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="mx-auto max-w-7xl px-6"
+      >
 
         <Link
           to="/"
-          className="mb-8 inline-flex items-center rounded-xl bg-white px-5 py-3 font-medium shadow transition hover:bg-slate-100"
+          className="mb-8 inline-flex rounded-xl bg-white px-5 py-3 shadow hover:bg-slate-50"
         >
           ← Back to Hotels
         </Link>
 
         <div className="grid gap-10 lg:grid-cols-2">
 
-          <div>
-
-            <img
+          <motion.div
+            initial={{ x: -40 }}
+            animate={{ x: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <motion.img
+              layoutId={`hotel-${hotel.id}`}
               src={selectedImage}
               alt={hotel.name}
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.4 }}
               className="h-[500px] w-full rounded-3xl object-cover shadow-xl"
             />
 
@@ -70,40 +86,39 @@ function HotelDetails() {
               {(hotel.photos?.length
                 ? hotel.photos
                 : [hotel.thumbnail]
-              )
-                .slice(0, 8)
-                .map((photo, index) => (
-                  <img
-                    key={index}
-                    src={photo}
-                    alt=""
-                    onClick={() => setSelectedImage(photo)}
-                    className={`h-24 w-full cursor-pointer rounded-xl object-cover transition duration-300 hover:scale-105 ${
-                      selectedImage === photo
-                        ? "ring-4 ring-slate-800"
-                        : ""
-                    }`}
-                  />
-                ))}
+              ).map((photo, index) => (
+                <motion.img
+                  whileHover={{ scale: 1.08 }}
+                  key={index}
+                  src={photo}
+                  alt=""
+                  onClick={() => setSelectedImage(photo)}
+                  className={`h-24 w-full cursor-pointer rounded-xl object-cover ${
+                    selectedImage === photo
+                      ? "ring-4 ring-slate-800"
+                      : ""
+                  }`}
+                />
+              ))}
 
             </div>
+          </motion.div>
 
-          </div>
+          <motion.div
+            initial={{ x: 40 }}
+            animate={{ x: 0 }}
+            transition={{ duration: 0.6 }}
+          >
 
-          <div>
+            <div className="flex items-center gap-3">
 
-            <div className="flex items-center gap-6">
+              <span className="rounded-full bg-orange-100 px-4 py-2 text-orange-600">
+                Luxury Stay
+              </span>
 
-              <div className="flex items-center gap-2 rounded-full bg-yellow-100 px-4 py-2 text-yellow-700">
-                <FaStar />
-                <span className="font-semibold">
-                  {hotel.rating}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2 text-slate-600">
-                <FaLocationDot className="text-orange-400" />
-                <span>{hotel.location}</span>
+              <div className="flex items-center gap-2">
+                <FaStar className="text-yellow-400" />
+                <span>{hotel.rating}</span>
               </div>
 
             </div>
@@ -112,65 +127,45 @@ function HotelDetails() {
               {hotel.name}
             </h1>
 
-            <div className="mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="mt-5 flex items-center gap-2 text-slate-500">
+              <FaLocationDot className="text-orange-500" />
+              {hotel.location}
+            </div>
 
+            <div className="mt-8 rounded-2xl bg-orange-50 p-6">
               <h2 className="text-4xl font-bold text-slate-800">
                 ₹{Math.round(hotel.price)}
               </h2>
 
-              <p className="mt-2 text-slate-500">
+              <p className="mt-1 text-slate-500">
                 Per Night
               </p>
-
             </div>
 
             <div className="mt-10">
-
-              <h2 className="text-2xl font-semibold text-slate-800">
+              <h2 className="text-2xl font-semibold">
                 About this Hotel
               </h2>
 
-              <p className="mt-5 leading-8 text-slate-600">
+              <p className="mt-4 leading-8 text-slate-600">
                 {hotel.description}
               </p>
-
             </div>
 
-            <div className="mt-10 grid grid-cols-2 gap-4">
-
-              <div className="rounded-2xl bg-white p-5 text-center shadow-sm">
-                <h3 className="text-3xl font-bold text-slate-800">
-                  {hotel.rating}
-                </h3>
-
-                <p className="mt-2 text-slate-500">
-                  Guest Rating
-                </p>
-              </div>
-
-              <div className="rounded-2xl bg-white p-5 text-center shadow-sm">
-                <h3 className="text-3xl font-bold text-slate-800">
-                  24/7
-                </h3>
-
-                <p className="mt-2 text-slate-500">
-                  Support
-                </p>
-              </div>
-
-            </div>
-
-            <button className="mt-10 w-full rounded-2xl bg-slate-800 py-4 text-lg font-semibold text-white transition hover:bg-black">
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="mt-10 w-full rounded-2xl bg-slate-800 py-4 text-lg font-semibold text-white"
+            >
               Book Now
-            </button>
+            </motion.button>
 
-          </div>
+          </motion.div>
 
         </div>
 
-      </div>
-
-    </main>
+      </motion.div>
+    </motion.main>
   );
 }
 

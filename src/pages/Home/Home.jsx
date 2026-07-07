@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
 import { fetchHotels } from "../../services/api";
 
 import Navbar from "../../components/Navbar/Navbar";
@@ -6,6 +7,7 @@ import Hero from "../../components/Hero/Hero";
 import FilterBar from "../../components/FilterBar/FilterBar";
 import HotelCard from "../../components/HotelCard/HotelCard";
 import Loader from "../../components/Loader/Loader";
+import HotelSkeleton from "../../components/Loader/HotelSkeleton";
 import Footer from "../../components/Footer/Footer";
 
 function Home() {
@@ -20,8 +22,12 @@ function Home() {
   useEffect(() => {
     const loadHotels = async () => {
       const data = await fetchHotels();
-      setHotels(data);
-      setLoading(false);
+
+      // Small delay so the skeleton is visible
+      setTimeout(() => {
+        setHotels(data);
+        setLoading(false);
+      }, 1200);
     };
 
     loadHotels();
@@ -68,7 +74,12 @@ function Home() {
   ]);
 
   if (loading) {
-    return <Loader />;
+    return (
+      <>
+        <Navbar />
+        <HotelSkeleton />
+      </>
+    );
   }
 
   return (
@@ -88,22 +99,22 @@ function Home() {
           id="hotels"
           className="mx-auto max-w-7xl px-6 py-14"
         >
-          <div className="mb-8">
-            <FilterBar
-              locations={locations}
-              selectedLocation={selectedLocation}
-              setSelectedLocation={setSelectedLocation}
-              selectedRating={selectedRating}
-              setSelectedRating={setSelectedRating}
-              sortBy={sortBy}
-              setSortBy={setSortBy}
-            />
-          </div>
 
-          <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <FilterBar
+            locations={locations}
+            selectedLocation={selectedLocation}
+            setSelectedLocation={setSelectedLocation}
+            selectedRating={selectedRating}
+            setSelectedRating={setSelectedRating}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+          />
+
+          <div className="mb-10 mt-10 flex items-end justify-between">
 
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-orange-500">
+
+              <p className="font-medium uppercase tracking-widest text-orange-500">
                 Explore
               </p>
 
@@ -111,48 +122,53 @@ function Home() {
                 Popular Hotels
               </h2>
 
-              <p className="mt-3 text-slate-500">
-                Discover premium stays across India with top ratings,
-                luxury amenities and unforgettable experiences.
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-white px-6 py-4 shadow">
-              <p className="text-sm text-slate-500">
-                Hotels Found
+              <p className="mt-2 text-slate-500">
+                Showing {filteredHotels.length} premium hotels
               </p>
 
-              <h3 className="text-3xl font-bold text-slate-800">
-                {filteredHotels.length}
-              </h3>
             </div>
 
           </div>
 
           {filteredHotels.length === 0 ? (
-            <div className="rounded-3xl bg-white py-20 text-center shadow">
-
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="rounded-3xl bg-white py-20 text-center shadow"
+            >
               <h2 className="text-3xl font-semibold text-slate-700">
                 No Hotels Found
               </h2>
 
-              <p className="mt-4 text-slate-500">
-                Try searching another city or changing your filters.
+              <p className="mt-3 text-slate-500">
+                Try another search or clear filters.
               </p>
-
-            </div>
+            </motion.div>
           ) : (
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <motion.div
+              variants={{
+                hidden: {},
+                show: {
+                  transition: {
+                    staggerChildren: 0.08,
+                  },
+                },
+              }}
+              initial="hidden"
+              animate="show"
+              className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            >
               {filteredHotels.map((hotel) => (
                 <HotelCard
                   key={hotel.id}
                   hotel={hotel}
                 />
               ))}
-            </div>
+            </motion.div>
           )}
 
         </section>
+
       </main>
 
       <Footer />
