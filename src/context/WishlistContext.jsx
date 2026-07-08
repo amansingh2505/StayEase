@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const WishlistContext = createContext();
 
@@ -13,12 +14,18 @@ export function WishlistProvider({ children }) {
   }, [wishlist]);
 
   const toggleWishlist = (id) => {
-    setWishlist((prev) =>
-      prev.includes(id)
-        ? prev.filter((item) => item !== id)
-        : [...prev, id]
-    );
-  };
+  if (wishlist.includes(id)) {
+    toast("Removed from Wishlist", {
+      icon: "💔",
+    });
+
+    setWishlist((prev) => prev.filter((item) => item !== id));
+  } else {
+    toast.success("Added to Wishlist ❤️");
+
+    setWishlist((prev) => [...prev, id]);
+  }
+};
 
   const isWishlisted = (id) => wishlist.includes(id);
 

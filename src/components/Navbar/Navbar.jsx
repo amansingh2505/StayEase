@@ -6,8 +6,11 @@ import {
   FaHeart,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useWishlist } from "../../context/WishlistContext";
 
 function Navbar() {
+  const { wishlist } = useWishlist();
+
   return (
     <motion.header
       initial={{ y: -80, opacity: 0 }}
@@ -95,6 +98,7 @@ function Navbar() {
           <motion.div
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.95 }}
+            className="relative"
           >
             <Link
               to="/wishlist"
@@ -102,6 +106,12 @@ function Navbar() {
             >
               <FaHeart className="text-red-500" />
             </Link>
+
+            {wishlist.length > 0 && (
+              <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                {wishlist.length}
+              </span>
+            )}
           </motion.div>
 
           <motion.button
