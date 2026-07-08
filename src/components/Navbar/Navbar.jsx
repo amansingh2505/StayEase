@@ -1,5 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
-import { FaHotel, FaPhoneAlt, FaBars } from "react-icons/fa";
+import {
+  FaHotel,
+  FaPhoneAlt,
+  FaBars,
+  FaHeart,
+} from "react-icons/fa";
 import { motion } from "framer-motion";
 
 function Navbar() {
@@ -86,6 +91,18 @@ function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-4 lg:flex">
+
+          <motion.div
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Link
+              to="/wishlist"
+              className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 transition hover:bg-slate-100"
+            >
+              <FaHeart className="text-red-500" />
+            </Link>
+          </motion.div>
 
           <motion.button
             whileHover={{ scale: 1.05 }}
