@@ -1,10 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+
 import App from "./App";
+import { WishlistProvider } from "./context/WishlistContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <WishlistProvider>
+      <App />
+    </WishlistProvider>
   </React.StrictMode>
 );
