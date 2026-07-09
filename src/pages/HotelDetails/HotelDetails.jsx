@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { FaLocationDot, FaStar } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { fetchHotels } from "../../services/api";
+import BookingCard from "../../components/BookingCard/BookingCard";
 
 function HotelDetails() {
   const { id } = useParams();
@@ -65,7 +66,7 @@ function HotelDetails() {
           ← Back to Hotels
         </Link>
 
-        <div className="grid gap-10 lg:grid-cols-2">
+        <div className="grid gap-10 lg:grid-cols-[1.7fr_1fr]">
 
           <motion.div
             initial={{ x: -40 }}
@@ -152,13 +153,9 @@ function HotelDetails() {
               </p>
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="mt-10 w-full rounded-2xl bg-slate-800 py-4 text-lg font-semibold text-white"
-            >
-              Book Now
-            </motion.button>
+            <div className="mt-10">
+              <BookingCard hotel={hotel} />
+            </div>
 
           </motion.div>
 
