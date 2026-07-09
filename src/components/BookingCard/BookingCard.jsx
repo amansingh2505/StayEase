@@ -1,10 +1,13 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 
 function BookingCard({ hotel }) {
+  const confirmationRef = useRef(null);
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState(2);
+  const [bookingConfirmed, setBookingConfirmed] = useState(false);
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -30,6 +33,39 @@ function BookingCard({ hotel }) {
   const subtotal = roomPrice * nights + guestFee;
   const taxes = Math.round(subtotal * 0.18);
   const total = subtotal + taxes;
+  const formatDate = (date) => {
+  return new Date(date).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+};
+  const handleBooking = () => {
+  if (!checkIn) {
+    toast.error("Please select a check-in date.");
+    return;
+  }
+
+  if (!checkOut) {
+    toast.error("Please select a check-out date.");
+    return;
+  }
+
+  if (nights <= 0) {
+    toast.error("Check-out must be after check-in.");
+    return;
+  }
+
+  toast.success("Booking Confirmed!");
+
+   setBookingConfirmed(true);
+   setTimeout(() => {
+     confirmationRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+    }, 150); 
+};
 
   return (
     <motion.div
@@ -156,13 +192,73 @@ function BookingCard({ hotel }) {
 
       </div>
 
-      <motion.button
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.96 }}
-        className="mt-8 w-full rounded-2xl bg-slate-800 py-4 text-lg font-semibold text-white transition hover:bg-black"
-      >
-        Reserve Your Stay
-      </motion.button>
+       <motion.button
+        whileHover={
+        !bookingConfirmed
+        ? { scale: 1.03 }
+            : {}
+          }
+         whileTap={
+          !bookingConfirmed
+         ? { scale: 0.96 }
+         : {}
+           }
+         onClick={handleBooking}
+         disabled={bookingConfirmed}
+           className={`mt-8 w-full rounded-2xl py-4 text-lg font-semibold text-white transition ${
+          bookingConfirmed
+            ? "cursor-default bg-green-600"
+         : "bg-slate-800 hover:bg-black"
+          }`}
+        >
+            {bookingConfirmed
+             ? "✓ Reservation Confirmed"
+            : "Reserve Your Stay"}   
+        </motion.button>
+     
+      {bookingConfirmed && (
+     <motion.div
+      ref={confirmationRef}
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    className="mt-6 rounded-2xl border border-green-200 bg-green-50 p-5"
+  >
+    <h3 className="text-xl font-bold text-green-700">
+      ✅ Booking Confirmed
+    </h3>
+
+    <div className="mt-4 space-y-2 text-sm text-slate-700">
+
+      <div className="flex justify-between">
+        <span>Hotel</span>
+        <span>{hotel.name}</span>
+      </div>
+
+      <div className="flex justify-between">
+        <span>Guests</span>
+        <span>{guests}</span>
+      </div>
+
+      <div className="flex justify-between">
+        <span>Check-in</span>
+        <span>{formatDate(checkIn)}</span>
+      </div>
+
+      <div className="flex justify-between">
+        <span>Check-out</span>
+        <span>{formatDate(checkOut)}</span>
+      </div>
+
+      <hr className="my-3" />
+
+      <div className="flex justify-between text-lg font-bold">
+        <span>Total</span>
+        <span>₹{total}</span>
+      </div>
+
+    </div>
+  </motion.div>
+)}
 
     </motion.div>
   );
