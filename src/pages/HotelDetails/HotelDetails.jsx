@@ -21,6 +21,20 @@ function HotelDetails() {
       );
 
       setHotel(selectedHotel);
+          if (selectedHotel) {
+               const recent =
+              JSON.parse(localStorage.getItem("recentHotels")) || [];
+
+           const updated = [
+           selectedHotel,
+          ...recent.filter((item) => item.id !== selectedHotel.id),
+          ].slice(0, 5);
+
+         localStorage.setItem(
+          "recentHotels",
+           JSON.stringify(updated)
+         );
+        }
 
       if (selectedHotel) {
         setSelectedImage(
