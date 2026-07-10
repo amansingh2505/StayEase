@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { fetchHotels } from "../../services/api";
 import BookingCard from "../../components/BookingCard/BookingCard";
 import SimilarHotels from "../../components/SimilarHotels/SimilarHotels";
+import RecentlyViewed from "../../components/RecentlyViewed/RecentlyViewed";
 
 function HotelDetails() {
   const { id } = useParams();
@@ -177,6 +178,7 @@ function HotelDetails() {
         </div>
       </motion.div>
       <SimilarHotels currentHotel={hotel} />
+      <RecentlyViewed />
     </motion.main>
   );
 }
