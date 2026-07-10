@@ -4,6 +4,7 @@ import { FaLocationDot, FaStar } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { fetchHotels } from "../../services/api";
 import BookingCard from "../../components/BookingCard/BookingCard";
+import SimilarHotels from "../../components/SimilarHotels/SimilarHotels";
 
 function HotelDetails() {
   const { id } = useParams();
@@ -160,8 +161,8 @@ function HotelDetails() {
           </motion.div>
 
         </div>
-
       </motion.div>
+      <SimilarHotels currentHotel={hotel} />
     </motion.main>
   );
 }
