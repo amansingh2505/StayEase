@@ -31,7 +31,7 @@ npm run dev
 
 ## 🌐 API
 
-Hotel data is fetched from the provided REST API .
+Hotel data is fetched from the provided REST API.
 
 ## 👨‍💻 Author
 
