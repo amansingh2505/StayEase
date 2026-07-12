@@ -177,7 +177,7 @@ function HotelDetails() {
           </motion.div>
 
                 </div>
-        <Amenities />
+        <Amenities hotel={hotel} />
         <SimilarHotels currentHotel={hotel} />
         <RecentlyViewed />
 
