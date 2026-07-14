@@ -7,6 +7,7 @@ import BookingCard from "../../components/BookingCard/BookingCard";
 import SimilarHotels from "../../components/SimilarHotels/SimilarHotels";
 import RecentlyViewed from "../../components/RecentlyViewed/RecentlyViewed";
 import Amenities from "../../components/Amenities/Amenities";
+import GuestReviews from "../../components/GuestReviews/GuestReviews";
 
 function HotelDetails() {
   const { id } = useParams();
@@ -177,8 +178,9 @@ function HotelDetails() {
           </motion.div>
 
                 </div>
-        <Amenities hotel={hotel} />
+                
         <SimilarHotels currentHotel={hotel} />
+        <GuestReviews hotel={hotel} />
         <RecentlyViewed />
 
       </motion.div>
