@@ -1,6 +1,6 @@
 # 🏨 StayEase
 
-A modern and responsive **Hotel Booking Frontend** built using **React.js**, **Vite**, and **Tailwind CSS**. The application allows users to browse hotels, search, filter, sort, and view detailed hotel information using a REST API.
+A modern and responsive **Hotel Booking Frontend** built using **React.js**, **Vite**, and **Tailwind CSS**. The application allows users to browse hotels, search, filter, sort, and view detailed hotel information using a REST API
 
 ## 🚀 Features
 
