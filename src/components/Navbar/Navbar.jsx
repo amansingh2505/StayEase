@@ -4,6 +4,7 @@ import {
   FaPhoneAlt,
   FaBars,
   FaHeart,
+  FaSuitcaseRolling,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useWishlist } from "../../context/WishlistContext";
@@ -112,6 +113,21 @@ function Navbar() {
                 {wishlist.length}
               </span>
             )}
+          </motion.div>
+
+          <motion.div
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Link
+              to="/bookings"
+              className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 transition hover:bg-slate-100"
+            >
+              <FaSuitcaseRolling
+                size={20}
+                className="text-slate-700"
+              />
+            </Link>
           </motion.div>
 
           <motion.button
