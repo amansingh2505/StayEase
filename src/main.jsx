@@ -4,10 +4,12 @@ import "./index.css";
 import { Toaster } from "react-hot-toast";
 import App from "./App";
 import { WishlistProvider } from "./context/WishlistContext";
+import { AuthProvider } from "./context/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-  <WishlistProvider>
+    <AuthProvider>
+      <WishlistProvider>
 
     <Toaster
       position="top-right"
@@ -16,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
     <App />
 
-  </WishlistProvider>
-</React.StrictMode>
+      </WishlistProvider>
+    </AuthProvider>
+  </React.StrictMode>
 );
