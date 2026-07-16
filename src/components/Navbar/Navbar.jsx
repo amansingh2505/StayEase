@@ -5,6 +5,7 @@ import {
   FaBars,
   FaHeart,
   FaSuitcaseRolling,
+  FaUserCircle,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useWishlist } from "../../context/WishlistContext";
@@ -12,7 +13,8 @@ import { useAuth } from "../../context/AuthContext";
 
 function Navbar() {
   const { wishlist } = useWishlist();
-  const { user, isLoggedIn, logout } = useAuth();
+  // Removed 'user' and 'logout' from destructuring since they are no longer needed here
+  const { isLoggedIn } = useAuth();
 
   return (
     <motion.header
@@ -129,32 +131,32 @@ function Navbar() {
           </motion.div>
 
           {isLoggedIn ? (
-            <div className="flex items-center gap-3">
-              <div className="text-right">
-                <p className="text-sm font-semibold text-slate-800">
-                  {user.name}
-                </p>
-                <p className="text-xs text-slate-500">
-                  {user.email}
-                </p>
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={logout}
-                className="rounded-xl border border-red-200 px-4 py-2 font-medium text-red-600 transition hover:bg-red-50"
-              >
-                Logout
-              </motion.button>
-            </div>
-          ) : (
-            <Link
-              to="/login"
-              className="rounded-xl border border-slate-200 px-5 py-2.5 font-medium text-slate-700 transition hover:bg-slate-100"
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              Login
-            </Link>
+              <Link
+                to="/profile"
+                className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 transition hover:bg-slate-100"
+              >
+                <FaUserCircle
+                  size={24}
+                  className="text-slate-700"
+                />
+              </Link>
+            </motion.div>
+          ) : (
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link
+                to="/login"
+                className="rounded-xl border border-slate-200 px-5 py-2.5 font-medium text-slate-700 transition hover:bg-slate-100"
+              >
+                Login
+              </Link>
+            </motion.div>
           )}
 
           <motion.a

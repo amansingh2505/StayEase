@@ -5,6 +5,7 @@ import Wishlist from "./pages/Wishlist/Wishlist";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import Bookings from "./pages/Bookings/Bookings";
 import Login from "./pages/Login/Login";
+import Profile from "./pages/Profile/Profile";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/bookings" element={<Bookings />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
 
     </BrowserRouter>
