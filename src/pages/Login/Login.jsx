@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaEye, FaEyeSlash, FaHotel } from "react-icons/fa";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -7,6 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -20,10 +21,10 @@ function Login() {
   const handleChange = (e) => {
     const { name, value, checked, type } = e.target;
 
-    setForm({
-      ...form,
+    setForm((prev) => ({
+      ...prev,
       [name]: type === "checkbox" ? checked : value,
-    });
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -52,14 +53,21 @@ function Login() {
       return;
     }
     
-    login({
-      name: existingUser.name,
-      email: existingUser.email,
-    });
+    // Updated login call passing the remember state
+    login(
+      {
+        name: existingUser.name,
+        email: existingUser.email,
+      },
+      form.remember
+    );
     
     toast.success(`Welcome back, ${existingUser.name}!`);
     
-    navigate("/");
+    const redirectTo = location.state?.redirectTo || "/";
+    navigate(redirectTo, {
+      replace: true,
+    });
   };
 
   return (
