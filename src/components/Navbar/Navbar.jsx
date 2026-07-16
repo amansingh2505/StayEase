@@ -8,9 +8,11 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useWishlist } from "../../context/WishlistContext";
+import { useAuth } from "../../context/AuthContext";
 
 function Navbar() {
   const { wishlist } = useWishlist();
+  const { user, isLoggedIn, logout } = useAuth();
 
   return (
     <motion.header
@@ -23,7 +25,6 @@ function Navbar() {
       className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur-xl"
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-
         <motion.div
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.2 }}
@@ -58,7 +59,6 @@ function Navbar() {
         </motion.div>
 
         <nav className="hidden items-center gap-10 lg:flex">
-
           <NavLink
             to="/"
             onClick={() =>
@@ -91,11 +91,9 @@ function Navbar() {
           >
             Contact
           </a>
-
         </nav>
 
         <div className="hidden items-center gap-4 lg:flex">
-
           <motion.div
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.95 }}
@@ -130,15 +128,34 @@ function Navbar() {
             </Link>
           </motion.div>
 
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            onClick={() => alert("Login feature coming soon.")}
-            className="rounded-xl border border-slate-200 px-5 py-2.5 font-medium text-slate-700 transition hover:bg-slate-100"
-          >
-            Login
-          </motion.button>
+          {isLoggedIn ? (
+            <div className="flex items-center gap-3">
+              <div className="text-right">
+                <p className="text-sm font-semibold text-slate-800">
+                  {user.name}
+                </p>
+                <p className="text-xs text-slate-500">
+                  {user.email}
+                </p>
+              </div>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={logout}
+                className="rounded-xl border border-red-200 px-4 py-2 font-medium text-red-600 transition hover:bg-red-50"
+              >
+                Logout
+              </motion.button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="rounded-xl border border-slate-200 px-5 py-2.5 font-medium text-slate-700 transition hover:bg-slate-100"
+            >
+              Login
+            </Link>
+          )}
 
           <motion.a
             whileHover={{ scale: 1.05 }}
@@ -150,7 +167,6 @@ function Navbar() {
             <FaPhoneAlt size={12} />
             Contact
           </motion.a>
-
         </div>
 
         <motion.button
@@ -159,7 +175,6 @@ function Navbar() {
         >
           <FaBars />
         </motion.button>
-
       </div>
     </motion.header>
   );
