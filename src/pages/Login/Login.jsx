@@ -39,27 +39,37 @@ function Login() {
       return;
     }
 
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    
+    const existingUser = users.find(
+      (user) =>
+        user.email.toLowerCase() === form.email.toLowerCase() &&
+        user.password === form.password
+    );
+    
+    if (!existingUser) {
+      toast.error("Invalid email or password.");
+      return;
+    }
+    
     login({
-      name: "Guest User",
-      email: form.email,
+      name: existingUser.name,
+      email: existingUser.email,
     });
-
-    toast.success("Login Successful!");
-
+    
+    toast.success(`Welcome back, ${existingUser.name}!`);
+    
     navigate("/");
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-100 px-6">
-
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl"
       >
-
         <div className="mb-8 text-center">
-
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-100">
             <FaHotel
               size={28}
@@ -74,14 +84,12 @@ function Login() {
           <p className="mt-2 text-slate-500">
             Login to continue booking hotels.
           </p>
-
         </div>
 
         <form
           onSubmit={handleSubmit}
           className="space-y-5"
         >
-
           <div>
             <label className="mb-2 block font-medium">
               Email
@@ -98,19 +106,13 @@ function Login() {
           </div>
 
           <div>
-
             <label className="mb-2 block font-medium">
               Password
             </label>
 
             <div className="relative">
-
               <input
-                type={
-                  showPassword
-                    ? "text"
-                    : "password"
-                }
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={form.password}
                 onChange={handleChange}
@@ -120,31 +122,22 @@ function Login() {
 
               <button
                 type="button"
-                onClick={() =>
-                  setShowPassword(!showPassword)
-                }
+                onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2"
               >
-                {showPassword
-                  ? <FaEyeSlash />
-                  : <FaEye />}
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
-
             </div>
-
           </div>
 
           <label className="flex items-center gap-2 text-sm">
-
             <input
               type="checkbox"
               name="remember"
               checked={form.remember}
               onChange={handleChange}
             />
-
             Remember Me
-
           </label>
 
           <motion.button
@@ -154,7 +147,6 @@ function Login() {
           >
             Login
           </motion.button>
-
         </form>
 
         <p className="mt-6 text-center text-sm text-slate-500">
@@ -166,9 +158,7 @@ function Login() {
             Register
           </Link>
         </p>
-
       </motion.div>
-
     </div>
   );
 }
