@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 function BookingCard({ hotel }) {
   const confirmationRef = useRef(null);
@@ -8,6 +10,10 @@ function BookingCard({ hotel }) {
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState(2);
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
+
+  // Initialize routing and auth context
+  const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
   // Reset the form when a new hotel is opened
   useEffect(() => {
@@ -25,9 +31,7 @@ function BookingCard({ hotel }) {
     const start = new Date(checkIn);
     const end = new Date(checkOut);
 
-    const diff =
-      (end.getTime() - start.getTime()) /
-      (1000 * 60 * 60 * 24);
+    const diff = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
 
     return diff > 0 ? diff : 0;
   }, [checkIn, checkOut]);
@@ -35,8 +39,7 @@ function BookingCard({ hotel }) {
   const roomPrice = Math.round(hotel.price);
 
   // ₹500 per night for every guest above 2
-  const guestFee =
-    guests > 2 ? (guests - 2) * 500 * nights : 0;
+  const guestFee = guests > 2 ? (guests - 2) * 500 * nights : 0;
 
   const subtotal = roomPrice * nights + guestFee;
   const taxes = Math.round(subtotal * 0.18);
@@ -51,6 +54,19 @@ function BookingCard({ hotel }) {
   };
 
   const handleBooking = () => {
+    // Protect Booking Route
+    if (!isLoggedIn) {
+      toast.error("Please login to continue booking.");
+
+      navigate("/login", {
+        state: {
+          redirectTo: window.location.pathname,
+        },
+      });
+
+      return;
+    }
+
     if (!checkIn) {
       toast.error("Please select a check-in date.");
       return;
@@ -66,8 +82,7 @@ function BookingCard({ hotel }) {
       return;
     }
 
-    const bookings =
-      JSON.parse(localStorage.getItem("bookings")) || [];
+    const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
 
     // Improvement 1: Prevent duplicate bookings
     const alreadyBooked = bookings.some(
@@ -106,10 +121,7 @@ function BookingCard({ hotel }) {
     // Improvement 3: Limit stored bookings to 20
     const updatedBookings = bookings.slice(0, 20);
 
-    localStorage.setItem(
-      "bookings",
-      JSON.stringify(updatedBookings)
-    );
+    localStorage.setItem("bookings", JSON.stringify(updatedBookings));
 
     toast.success("Booking Confirmed!");
 
@@ -130,9 +142,7 @@ function BookingCard({ hotel }) {
       transition={{ duration: 0.6 }}
       className="sticky top-28 rounded-3xl bg-white p-6 shadow-xl"
     >
-      <h2 className="text-2xl font-bold text-slate-800">
-        Book Your Stay
-      </h2>
+      <h2 className="text-2xl font-bold text-slate-800">Book Your Stay</h2>
 
       <p className="mt-2 text-sm text-slate-500">
         Reserve your room instantly.
@@ -194,9 +204,7 @@ function BookingCard({ hotel }) {
                 {nights} Night{nights > 1 ? "s" : ""}
               </span>
 
-              <span>
-                ₹{roomPrice} / night
-              </span>
+              <span>₹{roomPrice} / night</span>
             </div>
 
             <div className="mt-3 flex justify-between">
@@ -235,23 +243,16 @@ function BookingCard({ hotel }) {
             </h3>
 
             <p className="mt-2 text-sm leading-6 text-slate-500">
-              Choose your check-in and check-out dates to calculate your booking cost.
+              Choose your check-in and check-out dates to calculate your booking
+              cost.
             </p>
           </div>
         )}
       </div>
 
       <motion.button
-        whileHover={
-          !bookingConfirmed
-            ? { scale: 1.03 }
-            : {}
-        }
-        whileTap={
-          !bookingConfirmed
-            ? { scale: 0.96 }
-            : {}
-        }
+        whileHover={!bookingConfirmed ? { scale: 1.03 } : {}}
+        whileTap={!bookingConfirmed ? { scale: 0.96 } : {}}
         onClick={handleBooking}
         disabled={bookingConfirmed}
         className={`mt-8 w-full rounded-2xl py-4 text-lg font-semibold text-white transition ${
@@ -260,9 +261,7 @@ function BookingCard({ hotel }) {
             : "bg-slate-800 hover:bg-black"
         }`}
       >
-        {bookingConfirmed
-          ? "✓ Reservation Confirmed"
-          : "Reserve Your Stay"}
+        {bookingConfirmed ? "✓ Reservation Confirmed" : "Reserve Your Stay"}
       </motion.button>
 
       {bookingConfirmed && (
