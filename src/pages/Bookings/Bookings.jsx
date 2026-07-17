@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 
@@ -18,6 +19,27 @@ function Bookings() {
       month: "short",
       year: "numeric",
     });
+  };
+
+  const handleCancelBooking = (bookingId) => {
+    const confirmCancel = window.confirm(
+      "Are you sure you want to cancel this booking?"
+    );
+
+    if (!confirmCancel) return;
+
+    const updatedBookings = bookings.filter(
+      (booking) => booking.id !== bookingId
+    );
+
+    localStorage.setItem(
+      "bookings",
+      JSON.stringify(updatedBookings)
+    );
+
+    setBookings(updatedBookings);
+
+    toast.success("Booking cancelled successfully.");
   };
 
   return (
@@ -130,7 +152,7 @@ function Bookings() {
                           </div>
                         </div>
 
-                        <div className="min-w-[170px] rounded-2xl bg-slate-50 p-5 text-right">
+                        <div className="min-w-[170px] flex-col flex rounded-2xl bg-slate-50 p-5 text-right">
                           <p className="text-3xl font-bold text-slate-800">
                             ₹{booking.total}
                           </p>
@@ -139,9 +161,18 @@ function Bookings() {
                             {booking.nights} night{booking.nights > 1 ? "s" : ""}
                           </p>
 
-                          <span className="mt-5 inline-flex rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
+                          <span className="mt-5 inline-flex self-end rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
                             {booking.status}
                           </span>
+
+                          <motion.button
+                            whileHover={{ scale: 1.04 }}
+                            whileTap={{ scale: 0.96 }}
+                            onClick={() => handleCancelBooking(booking.id)}
+                            className="mt-5 w-full rounded-xl bg-red-500 px-4 py-3 font-medium text-white transition hover:bg-red-600"
+                          >
+                            Cancel Booking
+                          </motion.button>
                         </div>
                       </div>
                     </div>
