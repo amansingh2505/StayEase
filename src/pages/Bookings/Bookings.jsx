@@ -1,16 +1,31 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 
 function Bookings() {
   const [bookings, setBookings] = useState([]);
+  const [bookingToCancel, setBookingToCancel] = useState(null);
 
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("bookings")) || [];
     setBookings(saved);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setBookingToCancel(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   const formatDate = (date) => {
@@ -22,14 +37,12 @@ function Bookings() {
   };
 
   const handleCancelBooking = (bookingId) => {
-    const confirmCancel = window.confirm(
-      "Are you sure you want to cancel this booking?"
-    );
+    setBookingToCancel(bookingId);
+  };
 
-    if (!confirmCancel) return;
-
+  const confirmCancelBooking = () => {
     const updatedBookings = bookings.filter(
-      (booking) => booking.id !== bookingId
+      (booking) => booking.id !== bookingToCancel
     );
 
     localStorage.setItem(
@@ -38,8 +51,13 @@ function Bookings() {
     );
 
     setBookings(updatedBookings);
+    setBookingToCancel(null);
 
     toast.success("Booking cancelled successfully.");
+  };
+
+  const closeCancelModal = () => {
+    setBookingToCancel(null);
   };
 
   return (
@@ -183,6 +201,47 @@ function Bookings() {
           )}
         </div>
       </main>
+
+      <AnimatePresence>
+        {bookingToCancel && (
+          <div
+            onClick={closeCancelModal}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+          >
+            <motion.div
+              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="w-full max-w-md rounded-3xl bg-white p-8 shadow-2xl"
+            >
+              <h2 className="text-2xl font-bold text-slate-800">
+                Cancel Booking?
+              </h2>
+
+              <p className="mt-3 text-slate-500">
+                Are you sure you want to cancel this booking? This action cannot be undone.
+              </p>
+
+              <div className="mt-8 flex justify-end gap-4">
+                <button
+                  onClick={closeCancelModal}
+                  className="rounded-xl border border-slate-300 px-5 py-3 font-medium hover:bg-slate-100"
+                >
+                  Keep Booking
+                </button>
+
+                <button
+                  onClick={confirmCancelBooking}
+                  className="rounded-xl bg-red-500 px-5 py-3 font-medium text-white hover:bg-red-600"
+                >
+                  Yes, Cancel
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       <Footer />
     </>
