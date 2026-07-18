@@ -33,6 +33,32 @@ function Home() {
     loadHotels();
   }, []);
 
+  useEffect(() => {
+    const trimmedSearch = search.trim();
+
+    if (!trimmedSearch) return;
+
+    const timeout = setTimeout(() => {
+      const recentSearches =
+        JSON.parse(localStorage.getItem("recentSearches")) || [];
+
+      const updatedSearches = [
+        trimmedSearch,
+        ...recentSearches.filter(
+          (item) =>
+            item.toLowerCase() !== trimmedSearch.toLowerCase()
+        ),
+      ].slice(0, 5);
+
+      localStorage.setItem(
+        "recentSearches",
+        JSON.stringify(updatedSearches)
+      );
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [search]);
+
   const locations = useMemo(() => {
     return [...new Set(hotels.map((hotel) => hotel.location))].sort();
   }, [hotels]);
