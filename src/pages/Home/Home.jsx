@@ -18,6 +18,7 @@ function Home() {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedRating, setSelectedRating] = useState("");
   const [sortBy, setSortBy] = useState("");
+  const [recentSearches, setRecentSearches] = useState([]);
 
   useEffect(() => {
     const loadHotels = async () => {
@@ -35,8 +36,14 @@ function Home() {
 
   useEffect(() => {
     const trimmedSearch = search.trim();
-
-    if (!trimmedSearch) return;
+    
+    const hasResults = hotels.some(
+      (hotel) =>
+        hotel.name.toLowerCase().includes(trimmedSearch.toLowerCase()) ||
+        hotel.location.toLowerCase().includes(trimmedSearch.toLowerCase())
+    );
+    
+    if (!trimmedSearch || !hasResults) return;
 
     const timeout = setTimeout(() => {
       const recentSearches =
@@ -54,10 +61,24 @@ function Home() {
         "recentSearches",
         JSON.stringify(updatedSearches)
       );
+      
+      setRecentSearches(updatedSearches);
     }, 500);
 
     return () => clearTimeout(timeout);
-  }, [search]);
+  }, [search, hotels]);
+
+  useEffect(() => {
+    const searches =
+      JSON.parse(localStorage.getItem("recentSearches")) || [];
+
+    setRecentSearches(searches);
+  }, []);
+
+  const clearRecentSearches = () => {
+    localStorage.removeItem("recentSearches");
+    setRecentSearches([]);
+  };
 
   const locations = useMemo(() => {
     return [...new Set(hotels.map((hotel) => hotel.location))].sort();
@@ -119,6 +140,35 @@ function Home() {
             search={search}
             setSearch={setSearch}
           />
+          
+          {recentSearches.length > 0 && (
+            <div className="mt-6 rounded-2xl bg-white p-5 shadow">
+              <div className="mb-3 flex items-center justify-between">
+                <h3 className="font-semibold text-slate-700">
+                  Recent Searches
+                </h3>
+
+                <button
+                  onClick={clearRecentSearches}
+                  className="text-sm font-medium text-red-500 hover:text-red-600"
+                >
+                  Clear History
+                </button>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                {recentSearches.map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => setSearch(item)}
+                    className="rounded-full bg-slate-100 px-4 py-2 text-sm transition hover:bg-orange-100 hover:text-orange-600"
+                  >
+                    🔍 {item}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
 
         <section
