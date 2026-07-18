@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
+import jsPDF from "jspdf";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 
@@ -58,6 +59,36 @@ function Bookings() {
 
   const closeCancelModal = () => {
     setBookingToCancel(null);
+  };
+
+  const downloadInvoice = (booking) => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(22);
+    doc.text("StayEase", 20, 20);
+
+    doc.setFontSize(16);
+    doc.text("Booking Invoice", 20, 32);
+
+    doc.setFontSize(12);
+
+    doc.text(`Booking ID: ${booking.id}`, 20, 50);
+    doc.text(`Hotel: ${booking.hotelName}`, 20, 60);
+    doc.text(`Location: ${booking.location}`, 20, 70);
+
+    doc.text(`Check-in: ${formatDate(booking.checkIn)}`, 20, 85);
+    doc.text(`Check-out: ${formatDate(booking.checkOut)}`, 20, 95);
+
+    doc.text(`Guests: ${booking.guests}`, 20, 105);
+    doc.text(`Nights: ${booking.nights}`, 20, 115);
+
+    doc.text(`Total Amount: ₹${booking.total}`, 20, 130);
+
+    doc.text(`Booking Date: ${booking.bookedAt}`, 20, 140);
+
+    doc.text(`Status: ${booking.status}`, 20, 150);
+
+    doc.save(`StayEase-Invoice-${booking.id}.pdf`);
   };
 
   return (
