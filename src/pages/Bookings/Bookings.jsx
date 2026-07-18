@@ -217,6 +217,15 @@ function Bookings() {
                           <motion.button
                             whileHover={{ scale: 1.04 }}
                             whileTap={{ scale: 0.96 }}
+                            onClick={() => downloadInvoice(booking)}
+                            className="mt-5 w-full rounded-xl bg-slate-800 px-4 py-3 font-medium text-white transition hover:bg-black"
+                          >
+                            Download Invoice
+                          </motion.button>
+
+                          <motion.button
+                            whileHover={{ scale: 1.04 }}
+                            whileTap={{ scale: 0.96 }}
                             onClick={() => handleCancelBooking(booking.id)}
                             className="mt-5 w-full rounded-xl bg-red-500 px-4 py-3 font-medium text-white transition hover:bg-red-600"
                           >
