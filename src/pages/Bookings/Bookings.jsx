@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
@@ -225,6 +225,49 @@ function Bookings() {
     // 10. Save
     doc.save(`StayEase-Invoice-${booking.id}.pdf`);
   };
+
+  const bookingStats = useMemo(() => {
+    const totalBookings = bookings.length;
+
+    const totalSpent = bookings.reduce(
+      (sum, booking) =>
+        sum +
+        Number(String(booking.total).replace(/[^\d]/g, "")),
+      0
+    );
+
+    const totalNights = bookings.reduce(
+      (sum, booking) => sum + booking.nights,
+      0
+    );
+
+    const averageBooking =
+      totalBookings > 0
+        ? Math.round(totalSpent / totalBookings)
+        : 0;
+
+    const locationCount = {};
+
+    bookings.forEach((booking) => {
+      locationCount[booking.location] =
+        (locationCount[booking.location] || 0) + 1;
+    });
+
+    const favoriteLocation =
+      Object.keys(locationCount).length > 0
+        ? Object.entries(locationCount).sort(
+            (a, b) => b[1] - a[1]
+          )[0][0]
+        : "-";
+
+    return {
+      totalBookings,
+      totalSpent,
+      totalNights,
+      averageBooking,
+      favoriteLocation,
+    };
+  }, [bookings]);
 
   return (
     <>
