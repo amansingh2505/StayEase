@@ -317,7 +317,45 @@ function Bookings() {
               </Link>
             </motion.div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-8">
+              {/* Statistics */}
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+                <div className="rounded-3xl bg-white p-6 shadow-lg">
+                  <p className="text-sm text-slate-500">📖 Total Bookings</p>
+                  <h2 className="mt-2 text-3xl font-bold text-slate-800">
+                    {bookingStats.totalBookings}
+                  </h2>
+                </div>
+
+                <div className="rounded-3xl bg-white p-6 shadow-lg">
+                  <p className="text-sm text-slate-500">💰 Total Spent</p>
+                  <h2 className="mt-2 text-3xl font-bold text-orange-600">
+                    ₹{bookingStats.totalSpent.toLocaleString("en-IN")}
+                  </h2>
+                </div>
+
+                <div className="rounded-3xl bg-white p-6 shadow-lg">
+                  <p className="text-sm text-slate-500">🌙 Total Nights</p>
+                  <h2 className="mt-2 text-3xl font-bold text-slate-800">
+                    {bookingStats.totalNights}
+                  </h2>
+                </div>
+
+                <div className="rounded-3xl bg-white p-6 shadow-lg">
+                  <p className="text-sm text-slate-500">📍 Favorite Location</p>
+                  <h2 className="mt-2 text-2xl font-bold text-slate-800">
+                    {bookingStats.favoriteLocation}
+                  </h2>
+                </div>
+
+                <div className="rounded-3xl bg-white p-6 shadow-lg">
+                  <p className="text-sm text-slate-500">📊 Average Booking</p>
+                  <h2 className="mt-2 text-3xl font-bold text-slate-800">
+                    ₹{bookingStats.averageBooking.toLocaleString("en-IN")}
+                  </h2>
+                </div>
+              </div>
+
               {bookings.map((booking, index) => (
                 <motion.div
                   key={booking.id}
