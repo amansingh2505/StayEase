@@ -9,6 +9,8 @@ import Footer from "../../components/Footer/Footer";
 function Bookings() {
   const [bookings, setBookings] = useState([]);
   const [bookingToCancel, setBookingToCancel] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("newest");
 
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("bookings")) || [];
@@ -269,6 +271,23 @@ function Bookings() {
     };
   }, [bookings]);
 
+  const filteredBookings = useMemo(() => {
+    let filtered = bookings.filter((booking) =>
+      booking.hotelName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    filtered.sort((a, b) => {
+      const first = new Date(a.bookedAt);
+      const second = new Date(b.bookedAt);
+
+      return sortOrder === "newest"
+        ? second - first
+        : first - second;
+    });
+
+    return filtered;
+  }, [bookings, searchTerm, sortOrder]);
+
   return (
     <>
       <Navbar />
@@ -356,7 +375,7 @@ function Bookings() {
                 </div>
               </div>
 
-              {bookings.map((booking, index) => (
+              {filteredBookings.map((booking, index) => (
                 <motion.div
                   key={booking.id}
                   initial={{ opacity: 0, y: 25 }}
