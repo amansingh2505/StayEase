@@ -520,7 +520,7 @@ function Bookings() {
 
       <Footer />
     </>
-  );
+   );
 }
 
 export default Bookings;
